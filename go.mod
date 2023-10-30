@@ -1,3 +1,3 @@
-module predict4go
+module github.com/LacunaSpace/predict4go
 
 go 1.20
