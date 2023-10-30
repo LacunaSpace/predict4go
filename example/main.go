@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/jenshz/predict4go/predict"
 	"fmt"
-	"time"
 	"math"
+	"predict4go/predict"
+	"time"
 )
 
 func main() {
@@ -22,15 +22,14 @@ func main() {
 	hiber1.CalculateSatelliteVectors(tstart)
 	pos := hiber1.CalculateSatelliteGroundTrack()
 	fmt.Println(pos.String())
-	fmt.Printf("%f,%f\n", pos.Latitude / (math.Pi * 2.0) * 360, math.Mod(pos.Longitude / (math.Pi * 2.0) * 360 + 180, 360.0) - 180)
-
+	fmt.Printf("%f,%f\n", pos.Latitude/(math.Pi*2.0)*360, math.Mod(pos.Longitude/(math.Pi*2.0)*360+180, 360.0)-180)
 
 	qth := &predict.GroundStationPosition{
-		Latitude: 52.3547321,
-		Longitude: 4.8284119,
-		HeightAMSL: 10.0,
+		Latitude:          52.3547321,
+		Longitude:         4.8284119,
+		HeightAMSL:        10.0,
 		HorizonElevations: [36]int{},
-		Name: "Amsterdam",
+		Name:              "Amsterdam",
 	}
 
 	// Calculate next passes over Amsterdam
