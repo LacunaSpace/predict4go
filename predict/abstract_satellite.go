@@ -1,39 +1,41 @@
-/**
-  predict4java: An SDP4 / SGP4 library for satellite orbit predictions
+/*
+*
 
-  Copyright (C)  2004-2010  David A. B. Johnson, G4DPZ.
+	predict4java: An SDP4 / SGP4 library for satellite orbit predictions
 
-  This class is a Java port of one of the core elements of
-  the Predict program, Copyright John A. Magliacane,
-  KD2BD 1991-2003: http://www.qsl.net/kd2bd/predict.html
+	Copyright (C)  2004-2010  David A. B. Johnson, G4DPZ.
 
-  Dr. T.S. Kelso is the author of the SGP4/SDP4 orbital models,
-  originally written in Fortran and Pascal, and released into the
-  public domain through his website (http://www.celestrak.com/).
-  Neoklis Kyriazis, 5B4AZ, later re-wrote Dr. Kelso's code in C,
-  and released it under the GNU GPL in 2002.
-  PREDICT's core is based on 5B4AZ's code translation efforts.
+	This class is a Java port of one of the core elements of
+	the Predict program, Copyright John A. Magliacane,
+	KD2BD 1991-2003: http://www.qsl.net/kd2bd/predict.html
 
-  Author: David A. B. Johnson, G4DPZ <dave@g4dpz.me.uk>
+	Dr. T.S. Kelso is the author of the SGP4/SDP4 orbital models,
+	originally written in Fortran and Pascal, and released into the
+	public domain through his website (http://www.celestrak.com/).
+	Neoklis Kyriazis, 5B4AZ, later re-wrote Dr. Kelso's code in C,
+	and released it under the GNU GPL in 2002.
+	PREDICT's core is based on 5B4AZ's code translation efforts.
 
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/websat/
-  More details can be found at the project home page:
+	Author: David A. B. Johnson, G4DPZ <dave@g4dpz.me.uk>
 
-  http://websat.sourceforge.net
+	Comments, questions and bugreports should be submitted via
+	http://sourceforge.net/projects/websat/
+	More details can be found at the project home page:
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
+	http://websat.sourceforge.net
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, visit http://www.fsf.org/
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, visit http://www.fsf.org/
 */
 package predict
 
@@ -43,26 +45,26 @@ import (
 )
 
 const (
-	MINS_PER_DAY                             = 1.44E3
+	MINS_PER_DAY                             = 1.44e3
 	PI_OVER_TWO                              = math.Pi / 2.0
-	SECS_PER_DAY                             = 8.6400E4
-	FLATTENING_FACTOR                        = 3.35281066474748E-3
-	CK4                                      = 6.209887E-7
-	EARTH_GRAVITATIONAL_CONSTANT             = 3.986008E5
+	SECS_PER_DAY                             = 8.6400e4
+	FLATTENING_FACTOR                        = 3.35281066474748e-3
+	CK4                                      = 6.209887e-7
+	EARTH_GRAVITATIONAL_CONSTANT             = 3.986008e5
 	S                                        = 1.012229
-	QOMS2T                                   = 1.880279E-09
+	QOMS2T                                   = 1.880279e-09
 	EARTH_ROTATIONS_PER_SIDERIAL_DAY         = 1.00273790934
 	EARTH_ROTATIONS_RADIANS_PER_SIDERIAL_DAY = EARTH_ROTATIONS_PER_SIDERIAL_DAY * TWO_PI
-	RHO                                      = 1.5696615E-1
-	MFACTOR                                  = 7.292115E-5
-	SOLAR_RADIUS_KM                          = 6.96000E5
-	ASTRONOMICAL_UNIT                        = 1.49597870691E8
-	SPEED_OF_LIGHT                           = 2.99792458E8
+	RHO                                      = 1.5696615e-1
+	MFACTOR                                  = 7.292115e-5
+	SOLAR_RADIUS_KM                          = 6.96000e5
+	ASTRONOMICAL_UNIT                        = 1.49597870691e8
+	SPEED_OF_LIGHT                           = 2.99792458e8
 	PERIGEE_156_KM                           = 156.0
 	/* WGS 84 Earth radius km */
-	EARTH_RADIUS = 6.378137E3
+	EARTH_RADIUS = 6.378137e3
 	/* Solar radius - km (IAU 76) */
-	SOLAR_RADIUS = 6.96000E5
+	SOLAR_RADIUS = 6.96000e5
 )
 
 var _ Satellite = &AbstractSatellite{}
@@ -250,7 +252,10 @@ func (a *AbstractSatellite) calculateObs(julianUTC float64, positionVector *Vect
 		elevation = 180 - elevation
 	}
 
-	a.satPos.AboveHorizon = (elevation - float64(gsPos.HorizonElevations[sector])) > EPSILON
+	if sector < 36 {
+		a.satPos.AboveHorizon = (elevation - float64(gsPos.HorizonElevations[sector])) > EPSILON
+	}
+
 }
 
 func (a *AbstractSatellite) WillBeSeen(qth *GroundStationPosition) bool {
@@ -638,7 +643,7 @@ func thetaGJD(theJD float64) float64 {
 	ut := frac(theJD + 0.5)
 	aJD := theJD - ut
 	tu := (aJD - 2451545.0) / 36525.0
-	gmst := 24110.54841 + tu*(8640184.812866+tu*(0.093104-tu*6.2E-6))
+	gmst := 24110.54841 + tu*(8640184.812866+tu*(0.093104-tu*6.2e-6))
 	gmst = modulus(gmst+SECS_PER_DAY*EARTH_ROTATIONS_PER_SIDERIAL_DAY*ut, SECS_PER_DAY)
 
 	return TWO_PI * gmst / SECS_PER_DAY
