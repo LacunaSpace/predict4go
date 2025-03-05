@@ -40,8 +40,6 @@
 package predict
 
 import (
-	"fmt"
-	"log"
 	"math"
 	"time"
 )
@@ -256,10 +254,6 @@ func (a *AbstractSatellite) calculateObs(julianUTC float64, positionVector *Vect
 
 	if sector >= 0 && sector < 36 {
 		a.satPos.AboveHorizon = (elevation - float64(gsPos.HorizonElevations[sector])) > EPSILON
-	} else {
-		log.Println(fmt.Sprintf("elevation %v", elevation))
-		log.Println(fmt.Sprintf("sector %v", sector))
-		log.Println(fmt.Sprintf("HorizonElevations %v", gsPos.HorizonElevations))
 	}
 
 }
