@@ -174,3 +174,14 @@ func NewTLE(tle []string) (*TLE, error) {
 
 	return x, nil
 }
+
+// BstarFrac returns the B* fractional part as parsed from the original TLE record.
+// It includes the leading decimal, so the value is of magnitude e-5.
+func (tle TLE) BstarFrac() float64 {
+	return tle.bstarFrac
+}
+
+// BstarExp returns the B* exponent part (base 10) as parsed from the original TLE record.
+func (tle TLE) BstarExp() int {
+	return tle.bstarExp
+}
